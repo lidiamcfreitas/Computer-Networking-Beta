@@ -26,8 +26,8 @@ int main(int argc, char* argv[])
         DieWithError("socket() failed");
     
     memset(&echoServAddr, 0, sizeof(echoServAddr));
-    sockaddr_in.sin_family = AF_INET;
-    sockaddr_in.sin_addr.s_addr = htonl(INADDR_ANY);
+    echoServAddr.sin_family = AF_INET;
+    echoServAddr.sin_addr.s_addr = INADDR_ANY;
     echoServAddr.sin_port = htons(echoServPort);
     
     if (bind(servSock, (struct sockaddr*) &echoServAddr, sizeof(echoServAddr))<0) {
@@ -40,7 +40,14 @@ int main(int argc, char* argv[])
     
     for(;;)
     {
+        clntLen = sizeof(echoClntAddr);
+        if ((clntSock = accept(servSock, (struct sockaddr*) &echoClntAddr, &clntLen))<0) {
+            DieWithError("accept() failed");
+        }
         
+        printf("Handling client %s\n", inet_ntoa(echoClntAddr.sin_addr));
+        
+        HandleTCPClient(clntSock);
     }
     
 }

@@ -1,13 +1,13 @@
 CC=gcc
 CFLAGS=-c -Wall
 
-all: TCPEchoClient Server
+all: TCPEchoClient TCPEchoServer
 
 TCPEchoClient: TCPEchoClient.o DieWithError.o
 	$(CC) TCPEchoClient.o DieWithError.o -o TCPEchoClient
 
-Server: Server.o
-	$(CC) Server.o -o Server
+TCPEchoServer: TCPEchoServer.o HandleTCPClient.o DieWithError.o
+	$(CC) TCPEchoServer.o HandleTCPClient.o DieWithError.o -o TCPEchoServer
 
 TCPEchoClient.o: TCPEchoClient.c
 	$(CC) $(CFLAGS) TCPEchoClient.c
@@ -15,7 +15,10 @@ TCPEchoClient.o: TCPEchoClient.c
 DieWithError.o: DieWithError.c
 	$(CC) $(CFLAGS) DieWithError.c
 
-Server.o: Server.c
-	$(CC) $(CFLAGS) Server.c
+HandleTCPClient.o: HandleTCPClient.c
+	$(CC) $(CFLAGS) HandleTCPClient.c
+
+TCPEchoServer.o: TCPEchoServer.c
+	$(CC) $(CFLAGS) TCPEchoServer.c
 clean:
 	rm *.o

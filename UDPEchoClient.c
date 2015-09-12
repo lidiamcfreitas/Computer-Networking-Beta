@@ -44,16 +44,25 @@ int main(int argc, char *argv[])
     memset(&echoServAddr, 0, sizeof(echoServAddr));
     echoServAddr.sin_family = AF_INET;
     echoServAddr.sin_addr.s_addr = inet_addr(servIP);
-    echoServ.sin_port = htons(echoServPort);
+    echoServAddr.sin_port = htons(echoServPort);
     
-    if(sendto(sock, echoString, echoStringLen, 0, (struck sockaddr*) &echoServAddr, sizeof(echoServAddr))!= echoStringLen)
+    if(sendto(sock, echoString, echoStringLen, 0, (struct sockaddr*) &echoServAddr, sizeof(echoServAddr))!= echoStringLen)
         DieWithError("sendto() sent a different number of bytes than expected");
     
     fromSize = sizeof(fromAddr);
-    if ((respStringLen = recvfrom(sock, echoBuffer, ECHOMAX, 0, (struct sockaddr*) &fromAddr, &fromAddr))!= echoStringLen)
+    if ((respStringLen = recvfrom(sock, echoBuffer, ECHOMAX, 0, (struct sockaddr*) &fromAddr, &fromSize))!= echoStringLen)
         DieWithError("recvfrom() failed");
     
-    /* TO BE CONTINUED */
+    if (echoServAddr.sin_addr.s_addr != fromAddr.sin_addr.s_addr)
+    {
+        fprintf(stderr, "Error: received a packet from unknown source.\n");
+        exit(1);
+    }
     
+    echoBuffer[respStringLen] = '\0';
+    printf("Received: %s\n", echoBuffer);
+    
+    close(sock);
+    exit(1);
     
 }

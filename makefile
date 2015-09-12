@@ -15,6 +15,9 @@ TCPEchoServer: TCPEchoServer.o HandleTCPClient.o DieWithError.o
 UDPEchoClient: UDPEchoClient.o DieWithError.o
 	$(CC) UDPEchoClient.o DieWithError.o -o UDPEchoClient
 
+
+
+
 TCPEchoClient.o: TCPEchoClient.c
 	$(CC) $(CFLAGS) TCPEchoClient.c
 
@@ -23,6 +26,9 @@ TCPEchoServer.o: TCPEchoServer.c
 
 UDPEchoClient.o: UDPEchoClient.c
 	$(CC) $(CFLAGS) UDPEchoClient.c
+
+
+
 
 DieWithError.o: DieWithError.c
 	$(CC) $(CFLAGS) DieWithError.c
